@@ -6,123 +6,112 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.ankit.myjetpackcomposedemo.animation.color.ChangeBackgroundColorAnimateAsState
+import com.ankit.myjetpackcomposedemo.screen.home.HomeTopBar
+import com.ankit.myjetpackcomposedemo.screen.home.MainContent
 import com.ankit.myjetpackcomposedemo.ui.theme.dynamicBackgroundColor
 
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        // enableEdgeToEdge()
+       // enableEdgeToEdge()
         setContent {
-            val backgroundColor = dynamicBackgroundColor
-            val color1 = remember {
-                mutableStateOf(backgroundColor)
-            }
+            StartupApp(Modifier)
+        }
+    }
 
-            val colorState by
-            animateColorAsState(targetValue = color1.value, label = "color Animation")
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun StartupApp(modifier: Modifier) {
+        val backgroundColor = dynamicBackgroundColor
+        val colorState  = remember {
+            mutableStateOf(backgroundColor)
+        }
 
-            var isVisible by remember {
-                mutableStateOf(false)
-            }
+        val targetColorState by
+        animateColorAsState(targetValue = colorState.value, label = "color Animation")
 
-            MyJetpackComposeDemoTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    containerColor = colorState,
-                    topBar ={
+        var isVisible by remember {
+            mutableStateOf(false)
+        }
 
-                    } ,
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = {
-                                isVisible = !isVisible
-                            }
+        MyJetpackComposeDemoTheme {
+            val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+            Scaffold(
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                containerColor = targetColorState,
+                topBar = {
+                    HomeTopBar(modifier,scrollBehavior)
+                },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = {
+                            isVisible = !isVisible
+                        }
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.padding(5.dp)
                         ) {
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.padding(5.dp)
+                            Icon(Icons.Default.Edit, contentDescription = "icon")
+                            AnimatedVisibility(
+                                isVisible,
+    //                                    exit = slideOutHorizontally(
+    //                                        animationSpec = spring(
+    //                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+    //                                            stiffness = Spring.StiffnessMedium
+    //                                        )
+    //                                    ),
+    //                                    enter = slideInHorizontally(
+    //                                        animationSpec = spring(
+    //                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+    //                                            stiffness = Spring.StiffnessMedium
+    //                                        )
+    //                                    )
                             ) {
-                                Icon(Icons.Default.Edit, contentDescription = "icon")
-                                AnimatedVisibility(
-                                    isVisible,
-//                                    exit = slideOutHorizontally(
-//                                        animationSpec = spring(
-//                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-//                                            stiffness = Spring.StiffnessMedium
-//                                        )
-//                                    ),
-//                                    enter = slideInHorizontally(
-//                                        animationSpec = spring(
-//                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-//                                            stiffness = Spring.StiffnessMedium
-//                                        )
-//                                    )
-                                ) {
-                                    Text(
-                                        "Edit",
-                                        modifier = Modifier.padding(start = 8.dp)
-                                    )
-                                }
+                                Text(
+                                    "Edit",
+                                    modifier = modifier.padding(start = 8.dp)
+                                )
                             }
                         }
                     }
-                ) { padding ->
-                    MainContent(color1, backgroundColor, modifier = Modifier.padding(padding))
                 }
+            ) { padding ->
+                MainContent(colorState, backgroundColor, modifier = modifier.padding(padding))
             }
         }
     }
 
-    @Composable
-    private fun MainContent(
-        color1: MutableState<Color>,
-        backgroundColor: Color,
-        modifier: Modifier
-    ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ->
-            ChangeBackgroundColorAnimateAsState(
-                modifier = Modifier.padding(10.dp),
-                color1,
-                backgroundColor
-            )
-        }
-    }
+
+
+
 }
 
 

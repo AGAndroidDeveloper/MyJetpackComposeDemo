@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.ankit.myjetpackcomposedemo" />
+                  <option name="mobileSdkAppId" value="1:273850639510:android:d1b262b5ebc5b7d2b40eb7" />
+                  <option name="projectId" value="myjetpackcomposedemo" />
+                  <option name="projectNumber" value="273850639510" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

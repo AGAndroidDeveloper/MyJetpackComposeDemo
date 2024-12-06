@@ -27,3 +27,26 @@ object Constant {
 
         )
 }
+
+val places = arrayListOf(
+    "Paris",
+    "New York",
+    "Tokyo",
+    "Sydney",
+    "London",
+    "Dubai",
+    "Barcelona",
+    "Rome",
+    "Bangkok",
+    "Istanbul",
+    "Moscow",
+    "Berlin",
+    "Mumbai",
+    "Beijing",
+    "Cape Town",
+    "Rio de Janeiro",
+    "Singapore",
+    "Los Angeles",
+    "Amsterdam",
+    "Toronto"
+)

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "273850639510",
+    "project_id": "myjetpackcomposedemo",
+    "storage_bucket": "myjetpackcomposedemo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273850639510:android:d1b262b5ebc5b7d2b40eb7",
+        "android_client_info": {
+          "package_name": "com.ankit.myjetpackcomposedemo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEKCQ2ZpjJEzl33J0owwUuVs2Gu9fMiUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
