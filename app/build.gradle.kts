@@ -42,8 +42,19 @@ android {
 }
 
 dependencies {
+    // koin
+//    implementation ("io.insert-koin:koin-androidx-compose:4.1.0-Beta1")
+//    implementation("io.insert-koin:koin-bom:4.1.0-Beta1")
+//    implementation("io.insert-koin:koin-core")
+//    implementation("io.insert-koin:koin-androidx-compose-navigation:4.1.0-Beta1")
+//    implementation ("org.koin:koin-androidx-viewmodel:3.2.0")
+
+
+
+
+
     val lifecycle_version = "2.8.7"
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
    // ksp("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
     // retrofit
    // implementation("com.squareup.retrofit2:retrofit:2.11.0")

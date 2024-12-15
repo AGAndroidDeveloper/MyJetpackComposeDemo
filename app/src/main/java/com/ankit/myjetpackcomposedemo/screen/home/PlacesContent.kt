@@ -7,7 +7,7 @@ import com.ankit.myjetpackcomposedemo.ecommerse.model.ProductResponse
 
 
 @Composable
-fun PlacesList(modifier: Modifier, data: ArrayList<ProductResponse>) {
+fun PlacesListContent(modifier: Modifier, data: ArrayList<ProductResponse>) {
     LazyColumn(modifier = modifier) {
 
     }

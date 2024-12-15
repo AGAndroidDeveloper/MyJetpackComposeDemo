@@ -1,26 +1,33 @@
 package com.ankit.myjetpackcomposedemo.ecommerse.network
 
-import com.ankit.myjetpackcomposedemo.ecommerse.NetworkResult
+import com.ankit.myjetpackcomposedemo.ecommerse.result.NetworkResult
 import com.ankit.myjetpackcomposedemo.ecommerse.model.ProductResponse
 
 class Repository(private val service: ApiService) {
 
-    fun getAllProduct(): NetworkResult<ProductResponse> {
+
+    suspend fun getAllProduct(): NetworkResult<ArrayList<ProductResponse>> {
         val response = service.getAllProduct()
         val data = response.body()
         return try {
             if (response.isSuccessful) {
-                if (data?.data != null) {
-                    NetworkResult.Success(data = data.data)
+                if (data != null) {
+                    NetworkResult.Success(data = data)
                 } else {
-                    NetworkResult.Error(message = "${response.message()} code ${response.code()}")
+                    val errorMessage =
+                        Throwable(message = "${response.message()} code ${response.code()}")
+                    NetworkResult.Error(errorMessage)
                 }
             } else {
-                NetworkResult.Error(message = "${response.errorBody()} code ${response.code()}")
+                val errorMessage =
+                    Throwable(message = "${response.errorBody()} code ${response.code()}")
+                NetworkResult.Error(errorMessage)
             }
         } catch (e: Exception) {
-            NetworkResult.Error(message = "${e.localizedMessage} code ${response.code()}")
+            val message = Throwable("${response.errorBody()} code ${response.code()}")
+            NetworkResult.Error(message)
         }
 
     }
+
 }
