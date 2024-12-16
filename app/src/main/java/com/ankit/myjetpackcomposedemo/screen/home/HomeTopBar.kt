@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(modifier: Modifier, scrollBehavior: TopAppBarScrollBehavior) {
-
     TopAppBar(
         title = {
             Text(

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyJetpackComposeDemo</string>
+    <string name="description">Place Image</string>
 </resources>
