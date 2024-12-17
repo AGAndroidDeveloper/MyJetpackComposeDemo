@@ -35,10 +35,7 @@ fun HomeTopBar(modifier: Modifier, scrollBehavior: TopAppBarScrollBehavior) {
                 Icon(Icons.Default.Home, contentDescription = "homeIcon")
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
+        colors = TopAppBarDefaults.topAppBarColors(),
         scrollBehavior = scrollBehavior
     )
 

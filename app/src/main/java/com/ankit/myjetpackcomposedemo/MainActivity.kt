@@ -1,5 +1,6 @@
 package com.ankit.myjetpackcomposedemo
 
+import android.content.res.Configuration
 import com.ankit.myjetpackcomposedemo.ui.theme.MyJetpackComposeDemoTheme
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +17,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +31,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -54,8 +58,10 @@ import com.ankit.myjetpackcomposedemo.ecommerse.network.ApiProvider
 import com.ankit.myjetpackcomposedemo.ecommerse.network.Repository
 import com.ankit.myjetpackcomposedemo.ecommerse.result.NetworkResult
 import com.ankit.myjetpackcomposedemo.ecommerse.viewmodel.EcommerceViewmodel
+import com.ankit.myjetpackcomposedemo.screen.home.CollectProductApiState
 import com.ankit.myjetpackcomposedemo.screen.home.HomeTopBar
 import com.ankit.myjetpackcomposedemo.screen.home.PlacesListContent
+import com.ankit.myjetpackcomposedemo.screen.home.ShowLoadingStateLoader
 import com.ankit.myjetpackcomposedemo.ui.theme.dynamicBackgroundColor
 import com.ankit.myjetpackcomposedemo.ui.theme.primaryLight
 
@@ -75,167 +81,104 @@ class MainActivity : ComponentActivity() {
                 viewmodel.getProducts(repo)
             }
 
-            MyJetpackComposeDemoTheme{
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    viewmodel.productResponseState.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
-                        .also { resultState ->
-                            when (resultState.value) {
-                                is NetworkResult.Error -> {
-                                    loading = !loading
-                                    Log.e(
-                                        "ApiError",
-                                        "${(resultState.value as NetworkResult.Error).exception}"
-                                    )
-                                }
-
-                                NetworkResult.Idle -> {
-//                        splashScreen.setKeepOnScreenCondition { true }
-                                }
-
-                                NetworkResult.Loading -> {
-                                    if (loading) {
-                                        //  ShowLoadingStateLoader()
-                                    }
-                                }
-
-                                is NetworkResult.Success -> {
-                                    loading = !loading
-                                    ShowLoadingStateLoader()
-//                                StartupApp(
-//                                    Modifier,
-//                                    (resultState.value as NetworkResult.Success<ArrayList<ProductResponse>>).data
-//                                )
-                                }
-                            }
-
-                        }
+            MyJetpackComposeDemoTheme {
+                Surface(
+                    tonalElevation = 5.dp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    StartupApp(viewmodel = viewmodel)
+                    // CollectApiState(viewmodel, loading)
                 }
             }
-
-
         }
     }
 
-    @Composable
-    private fun ShowLoadingStateLoader() {
-        Column(
-            modifier = Modifier.wrapContentSize()
-                .clip(RoundedCornerShape(20.dp))
-                .background(color = primaryLight)
-                .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.primary
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .width(45.dp)
-                    .padding(bottom = 10.dp),
-                color = MaterialTheme.colorScheme.secondary,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant,
-            )
-            Text(
-                "Loading...",
-                modifier = Modifier.padding(10.dp),
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-        }
-    }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun StartupApp(modifier: Modifier, data: ArrayList<ProductResponse>) {
-        val backgroundColor = dynamicBackgroundColor
-        val colorState = remember {
-            mutableStateOf(backgroundColor)
-        }
-
-        val targetColorState by
-        animateColorAsState(targetValue = colorState.value, label = "color Animation")
-
+    private fun StartupApp(modifier: Modifier = Modifier, viewmodel: EcommerceViewmodel) {
         var isVisible by remember {
             mutableStateOf(false)
         }
-
-//        val viewmodel: EcommerceViewmodel by viewModels()
-//        viewmodel.getProducts(repo)
-
         val scrollBehavior =
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            containerColor = targetColorState,
-            topBar = {
-                HomeTopBar(modifier, scrollBehavior)
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {
-                        isVisible = !isVisible
-                    }
+        Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
+            HomeTopBar(modifier, scrollBehavior)
+        }, floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    isVisible = !isVisible
+                },
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(5.dp)
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.padding(5.dp)
+                    Icon(Icons.Default.Edit, contentDescription = "icon")
+                    AnimatedVisibility(
+                        isVisible,
                     ) {
-                        Icon(Icons.Default.Edit, contentDescription = "icon")
-                        AnimatedVisibility(
-                            isVisible,
-                            //                                    exit = slideOutHorizontally(
-                            //                                        animationSpec = spring(
-                            //                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            //                                            stiffness = Spring.StiffnessMedium
-                            //                                        )
-                            //                                    ),
-                            //                                    enter = slideInHorizontally(
-                            //                                        animationSpec = spring(
-                            //                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            //                                            stiffness = Spring.StiffnessMedium
-                            //                                        )
-                            //                                    )
-                        ) {
-                            Text(
-                                "Edit",
-                                modifier = modifier.padding(start = 8.dp)
-                            )
-                        }
+                        Text(
+                            "Edit", modifier = modifier.padding(start = 8.dp)
+                        )
                     }
                 }
             }
-        ) { padding ->
+        }) { padding ->
             Spacer(modifier.padding(padding))
-            PlacesListContent(modifier, data = data) { productId ->
-                val idMap = data.map { it.id }
-                val isContaines = idMap.contains(productId)
-                Log.e(
-                    "selectedProductId",
-                    "isContaines = $isContaines:product :${data[productId].title} :id: $productId"
-                )
-            }
-//                MainContent(
-//                    colorState,
-//                    backgroundColor,
-//                    modifier = modifier.padding(padding)
-//                )
+            CollectProductApiState(
+                onApiResultLoading = {
+                    ShowLoadingStateLoader()
+                },
+                onApiResultFailed = { th ->
+                    Log.d("api failed", "failed :${th}")
+                },
+                onApiResultSuccess = { data ->
+                    PlacesListContent(modifier, data = data) { productId ->
+                        val idMap = data.map { it.id }
+                        val isContaines = idMap.contains(productId)
+                        Log.e(
+                            "selectedProductId",
+                            "isContaines = $isContaines:product :${data[productId].title} :id: $productId"
+                        )
+                    }
+
+                },
+                viewmodel = viewmodel
+            )
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyJetpackComposeDemoTheme {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ->
+
+    @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+    @Composable
+    fun GreetingPreviewNight() {
+        MyJetpackComposeDemoTheme {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ->
 //            Greeting(
 //                name = "Android",
 //                modifier = Modifier
 //            )
+                ShowLoadingStateLoader()
+            }
         }
     }
+
+    @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+    @Composable
+    fun GreetingPreviewDay() {
+        MyJetpackComposeDemoTheme {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ->
+//            Greeting(
+//                name = "Android",
+//                modifier = Modifier
+//            )
+                ShowLoadingStateLoader()
+            }
+        }
+    }
+
 }
