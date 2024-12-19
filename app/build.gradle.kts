@@ -49,6 +49,7 @@ dependencies {
 //    implementation("io.insert-koin:koin-androidx-compose-navigation:4.1.0-Beta1")
 //    implementation ("org.koin:koin-androidx-viewmodel:3.2.0")
 
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
 
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")

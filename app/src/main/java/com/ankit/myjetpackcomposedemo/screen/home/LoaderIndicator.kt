@@ -28,6 +28,7 @@ import com.ankit.myjetpackcomposedemo.ui.theme.MyJetpackComposeDemoTheme
 
 @Composable
  fun ShowLoadingStateLoader() {
+
     Column(
         modifier = Modifier
             .size(150.dp)
@@ -40,14 +41,14 @@ import com.ankit.myjetpackcomposedemo.ui.theme.MyJetpackComposeDemoTheme
             modifier = Modifier
                 .width(45.dp),
             color = MaterialTheme.colorScheme.secondary,
-            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            trackColor = MaterialTheme.colorScheme.onSecondary,
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             "Loading...",
             modifier = Modifier.padding(10.dp),
             style = TextStyle(
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -59,7 +60,7 @@ import com.ankit.myjetpackcomposedemo.ui.theme.MyJetpackComposeDemoTheme
 @Composable
 fun GreetingPreviewNight() {
     MyJetpackComposeDemoTheme {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ->
+        Box(modifier = Modifier, contentAlignment = Alignment.Center) { ->
 //            Greeting(
 //                name = "Android",
 //                modifier = Modifier
@@ -74,7 +75,7 @@ fun GreetingPreviewNight() {
 @Composable
 fun GreetingPreviewDay() {
     MyJetpackComposeDemoTheme {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ->
+        Box(modifier = Modifier, contentAlignment = Alignment.Center) { ->
 //            Greeting(
 //                name = "Android",
 //                modifier = Modifier

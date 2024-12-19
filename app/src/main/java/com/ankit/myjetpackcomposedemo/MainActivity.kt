@@ -1,31 +1,21 @@
 package com.ankit.myjetpackcomposedemo
 
 import android.content.res.Configuration
-import com.ankit.myjetpackcomposedemo.ui.theme.MyJetpackComposeDemoTheme
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -37,44 +27,40 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ankit.myjetpackcomposedemo.ecommerse.model.ProductResponse
 import com.ankit.myjetpackcomposedemo.ecommerse.network.ApiProvider
 import com.ankit.myjetpackcomposedemo.ecommerse.network.Repository
-import com.ankit.myjetpackcomposedemo.ecommerse.result.NetworkResult
 import com.ankit.myjetpackcomposedemo.ecommerse.viewmodel.EcommerceViewmodel
 import com.ankit.myjetpackcomposedemo.screen.home.CollectProductApiState
 import com.ankit.myjetpackcomposedemo.screen.home.HomeTopBar
 import com.ankit.myjetpackcomposedemo.screen.home.PlacesListContent
 import com.ankit.myjetpackcomposedemo.screen.home.ShowLoadingStateLoader
-import com.ankit.myjetpackcomposedemo.ui.theme.dynamicBackgroundColor
-import com.ankit.myjetpackcomposedemo.ui.theme.primaryLight
+import com.ankit.myjetpackcomposedemo.ui.theme.MyJetpackComposeDemoTheme
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        // enableEdgeToEdge()
+        enableEdgeToEdge()
         setContent {
             var loading by remember { mutableStateOf(false) }
             val viewmodel: EcommerceViewmodel by viewModels()
             val repo = Repository(ApiProvider.getApiService()!!)
+            val systemUiController = rememberSystemUiController()
+
             //  viewmodel.getProducts(repo)
             LaunchedEffect(Unit) {
                 loading = !loading
@@ -82,9 +68,13 @@ class MainActivity : ComponentActivity() {
             }
 
             MyJetpackComposeDemoTheme {
+//                systemUiController.setStatusBarColor(
+//                    color = MaterialTheme.colorScheme.primary, // Recommended primary color from the theme
+//                    darkIcons = MaterialTheme.colorScheme.primary.luminance() > 0.5f // Light icons for dark backgrounds, dark icons for light backgrounds
+//                )
                 Surface(
                     tonalElevation = 5.dp,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.background,
                     modifier = Modifier.fillMaxSize()
                 ) {
                     StartupApp(viewmodel = viewmodel)
@@ -110,8 +100,8 @@ class MainActivity : ComponentActivity() {
                 onClick = {
                     isVisible = !isVisible
                 },
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+//                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+//                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -157,12 +147,14 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreviewNight() {
         MyJetpackComposeDemoTheme {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ->
-//            Greeting(
-//                name = "Android",
-//                modifier = Modifier
-//            )
-                ShowLoadingStateLoader()
+            Surface(
+                tonalElevation = 5.dp,
+                color = MaterialTheme.colorScheme.background,
+                modifier = Modifier.fillMaxSize()
+            ) {
+//                val viewmodel: EcommerceViewmodel by viewModels()
+//                StartupApp(viewmodel = viewmodel)
+                // CollectApiState(viewmodel, loading)
             }
         }
     }
@@ -171,12 +163,14 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreviewDay() {
         MyJetpackComposeDemoTheme {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ->
-//            Greeting(
-//                name = "Android",
-//                modifier = Modifier
-//            )
-                ShowLoadingStateLoader()
+            Surface(
+                tonalElevation = 5.dp,
+                color = MaterialTheme.colorScheme.background,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val viewmodel: EcommerceViewmodel by viewModels()
+             //   StartupApp(modifier = Modifier,ecommerceViewModel: EcommerceViewModel = viewModel())
+                // CollectApiState(viewmodel, loading)
             }
         }
     }
